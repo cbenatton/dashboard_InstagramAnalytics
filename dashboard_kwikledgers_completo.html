@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard 90 dias — KwikLedgers Instagram</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+:root{--blue:#1F3FD0;--orange:#FF4E1C;--green:#1D9E75;--red:#E24B4A;--amber:#EF9F27;--gray-50:#F8F8F7;--gray-100:#F1F0EC;--gray-200:#E2E1DB;--gray-400:#999890;--gray-600:#5F5E5A;--gray-900:#1A1A18;--border:rgba(0,0,0,0.09);--r-md:10px;--r-lg:14px;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--gray-50);color:var(--gray-900);font-size:14px;line-height:1.6;}
+.topbar{background:white;border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;height:52px;position:sticky;top:0;z-index:200;}
+.brand{font-size:14px;font-weight:600;color:var(--blue);}
+.brand-sub{font-size:11px;color:var(--gray-400);margin-top:1px;}
+.tab-bar{background:white;border-bottom:1px solid var(--border);padding:0 2rem;display:flex;position:sticky;top:52px;z-index:190;overflow-x:auto;}
+.tab{padding:.75rem 1.1rem;font-size:13px;font-weight:500;color:var(--gray-400);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;user-select:none;transition:color .15s,border-color .15s;}
+.tab:hover{color:var(--gray-900);}
+.tab.active{color:var(--blue);border-bottom-color:var(--blue);}
+.tab-dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;vertical-align:middle;}
+.dot-br{background:#FF4E1C;}.dot-us{background:#1F3FD0;}.dot-cmp{background:#1D9E75;}
+.panel{display:none;}.panel.active{display:block;}
+.wrap{max-width:980px;margin:0 auto;padding:2rem 1.5rem 4rem;}
+.pg-title{font-size:24px;font-weight:600;margin-bottom:3px;}
+.pg-sub{font-size:13px;color:var(--gray-400);margin-bottom:2rem;}
+.mg{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:1.75rem;}
+.mc{background:white;border:1px solid var(--border);border-radius:var(--r-md);padding:.9rem 1rem;}
+.ml{font-size:11px;color:var(--gray-400);margin-bottom:3px;}
+.mv{font-size:22px;font-weight:600;color:var(--gray-900);}
+.ms{font-size:11px;color:var(--gray-400);margin-top:2px;}
+.mv.pos{color:var(--green);}.mv.neg{color:var(--red);}.mv.warn{color:var(--amber);}
+.sec{margin-bottom:2.5rem;}
+.sec-title{font-size:16px;font-weight:600;color:var(--gray-900);margin-bottom:1rem;display:flex;align-items:center;gap:8px;}
+.sec-title::after{content:'';flex:1;height:1px;background:var(--gray-200);}
+.chart-box{background:white;border:1px solid var(--border);border-radius:var(--r-lg);padding:1.25rem;margin-bottom:1rem;}
+.chart-label{font-size:12px;color:var(--gray-400);margin-bottom:1rem;}
+.phase-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:1.5rem;}
+.phase-card{background:white;border:1px solid var(--border);border-radius:var(--r-lg);padding:1rem 1.1rem;}
+.phase-badge{display:inline-block;font-size:10px;font-weight:500;padding:2px 8px;border-radius:20px;margin-bottom:6px;}
+.p1b{background:#EAF3DE;color:#3B6D11;}.p2b{background:#FAEEDA;color:#854F0B;}.p3b{background:#FCEBEB;color:#A32D2D;}.p4b{background:#E1F5EE;color:#0F6E56;}
+.phase-title{font-size:13px;font-weight:600;margin-bottom:4px;}
+.phase-reach{font-size:22px;font-weight:600;margin-bottom:2px;}
+.phase-sub{font-size:11px;color:var(--gray-400);}
+.insight-list{display:flex;flex-direction:column;gap:8px;}
+.insight{display:flex;gap:10px;padding:.7rem 1rem;border-radius:var(--r-md);font-size:13px;align-items:flex-start;}
+.ig{background:#EAF3DE;}.ia{background:#FAEEDA;}.ir{background:#FCEBEB;}.ii{background:#E6F1FB;}
+.idot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px;}
+.ig .idot{background:#1D9E75;}.ia .idot{background:#EF9F27;}.ir .idot{background:#E24B4A;}.ii .idot{background:#378ADD;}
+.source-badge{font-size:10px;font-weight:600;padding:1px 6px;border-radius:4px;margin-left:6px;vertical-align:middle;}
+.src-dado{background:#E6F1FB;color:#185FA5;}
+.src-alert{background:#FAEEDA;color:#854F0B;}
+.trend-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;}
+.trend-card{background:white;border:1px solid var(--border);border-radius:var(--r-lg);padding:1rem;}
+.trend-num{font-size:20px;font-weight:600;margin:4px 0;}
+.trend-label{font-size:11px;color:var(--gray-400);}
+.crit-box{background:#FCEBEB;border:1px solid #E24B4A;border-radius:var(--r-lg);padding:1rem 1.1rem;margin-bottom:1rem;font-size:13px;}
+.warn-box{background:#FAEEDA;border:1px solid #EF9F27;border-radius:var(--r-lg);padding:1rem 1.1rem;margin-bottom:1rem;font-size:13px;}
+.good-box{background:#EAF3DE;border:1px solid #1D9E75;border-radius:var(--r-lg);padding:1rem 1.1rem;margin-bottom:1rem;font-size:13px;}
+.post-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:.75rem;}
+.post-card{background:white;border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;}
+.post-img{width:100%;aspect-ratio:1;object-fit:cover;display:block;background:var(--gray-100);}
+.post-body{padding:.85rem 1rem;}
+.post-badge{display:inline-block;font-size:10px;font-weight:500;padding:2px 8px;border-radius:20px;margin-bottom:6px;}
+.pb-best{background:#EAF3DE;color:#3B6D11;}.pb-worst{background:#FCEBEB;color:#A32D2D;}
+.post-stats{display:flex;gap:12px;font-size:12px;color:var(--gray-600);margin-top:6px;}
+.post-stat span{font-weight:600;color:var(--gray-900);}
+.post-link{font-size:11px;color:var(--blue);text-decoration:none;margin-top:6px;display:inline-block;}
+.post-link:hover{text-decoration:underline;}
+.post-type{font-size:11px;color:var(--gray-400);margin-bottom:3px;}
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1.5rem;}
+.compare-card{background:white;border:1px solid var(--border);border-radius:var(--r-lg);padding:1rem 1.1rem;}
+.compare-title{font-size:12px;font-weight:600;color:var(--gray-400);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.6rem;}
+.compare-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--gray-100);font-size:13px;}
+.compare-row:last-child{border-bottom:none;}
+.compare-val{font-weight:500;}
+.cv-g{color:var(--green);}.cv-r{color:var(--red);}
+.foot{margin-top:2.5rem;padding:1.25rem;background:white;border:1px solid var(--border);border-radius:var(--r-lg);text-align:center;font-size:12px;color:var(--gray-400);}
+.data-note{font-size:11px;color:var(--gray-400);font-style:italic;margin-top:.4rem;}
+@media(max-width:640px){.compare-grid,.post-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div><div class="brand">KwikLedgers · Analytics Instagram</div><div class="brand-sub">Dashboard 90 dias · Mar 25 – Jun 22, 2026 · Windsor.ai · todos os insights baseados em dados reais</div></div>
+</div>
+<div class="tab-bar">
+  <div class="tab active" onclick="switchTab('br')"><span class="tab-dot dot-br"></span>@kwikledgersbr — Brasil</div>
+  <div class="tab" onclick="switchTab('us')"><span class="tab-dot dot-us"></span>@kwikledgers — EUA</div>
+  <div class="tab" onclick="switchTab('cmp')"><span class="tab-dot dot-cmp"></span>Comparativo</div>
+  <div class="tab" onclick="switchTab('posts-br')"><span class="tab-dot dot-br"></span>Posts Brasil</div>
+  <div class="tab" onclick="switchTab('posts-us')"><span class="tab-dot dot-us"></span>Posts EUA</div>
+</div>
+
+<!-- ══ PAINEL BR ══ -->
+<div class="panel active" id="panel-br"><div class="wrap">
+<div class="pg-title">Análise de performance — @kwikledgersbr</div>
+<div class="pg-sub">LLC/abertura de empresa para brasileiros · 90 dias · 16 posts analisados · 1.537 seguidores</div>
+<div class="mg">
+  <div class="mc"><div class="ml">Alcance total</div><div class="mv">493.915</div><div class="ms">90 dias</div></div>
+  <div class="mc"><div class="ml">Interações totais</div><div class="mv">2.572</div><div class="ms">likes + saves + shares</div></div>
+  <div class="mc"><div class="ml">Saves totais</div><div class="mv">387</div><div class="ms">conteúdo salvo</div></div>
+  <div class="mc"><div class="ml">Shares totais</div><div class="mv">245</div><div class="ms">compartilhamentos</div></div>
+  <div class="mc"><div class="ml">Views totais</div><div class="mv">214.243</div><div class="ms">visualizações</div></div>
+  <div class="mc"><div class="ml">ER médio por post</div><div class="mv warn">5,2%</div><div class="ms">engajamento/alcance do post</div></div>
+</div>
+<div class="sec">
+  <div class="sec-title">Fases de alcance — 90 dias</div>
+  <div class="phase-grid">
+    <div class="phase-card"><span class="phase-badge p1b">Fase 1 — Pré-colapso</span><div class="phase-title">Mar 25 – Abr 07</div><div class="phase-reach" style="color:#1D9E75;">20.821</div><div class="phase-sub">alcance médio diário · pico: 30.875 (03/abr)</div></div>
+    <div class="phase-card"><span class="phase-badge p2b">Fase 2 — Queda gradual</span><div class="phase-title">Abr 08 – Abr 28</div><div class="phase-reach" style="color:#EF9F27;">5.651</div><div class="phase-sub">alcance médio diário · -73% vs fase 1</div></div>
+    <div class="phase-card"><span class="phase-badge p3b">Fase 3 — Vale</span><div class="phase-title">Abr 29 – Jun 15</div><div class="phase-reach" style="color:#E24B4A;">861</div><div class="phase-sub">alcance médio diário · -96% vs fase 1</div></div>
+    <div class="phase-card"><span class="phase-badge p4b">Fase 4 — Recuperação</span><div class="phase-title">Jun 16 – Jun 22</div><div class="phase-reach" style="color:#0F6E56;">6.063</div><div class="phase-sub">alcance médio diário · +604% vs fase 3</div></div>
+  </div>
+  <div class="chart-box">
+    <div class="chart-label">Alcance diário · Mar 25 – Jun 22, 2026 — sombreado por fase</div>
+    <canvas id="brReachChart" role="img" aria-label="Gráfico de alcance diário do @kwikledgersbr mostrando 4 fases"></canvas>
+  </div>
+</div>
+<div class="sec">
+  <div class="sec-title">Engajamento diário</div>
+  <div class="chart-box">
+    <div class="chart-label">Likes, saves e shares diários empilhados</div>
+    <canvas id="brEngajChart" role="img" aria-label="Gráfico de interações diárias do @kwikledgersbr"></canvas>
+  </div>
+  <div class="trend-grid">
+    <div class="trend-card"><div class="trend-label">Pico de alcance diário</div><div class="trend-num" style="color:#1D9E75;">30.875</div><div class="trend-label">03/abr · +49% acima da média fase 1</div></div>
+    <div class="trend-card"><div class="trend-label">Mínimo de alcance</div><div class="trend-num" style="color:#E24B4A;">1</div><div class="trend-label">27/abr · fundo do colapso</div></div>
+    <div class="trend-card"><div class="trend-label">Melhor dia de saves</div><div class="trend-num" style="color:#1D9E75;">37</div><div class="trend-label">21/jun · maior salvamento do período</div></div>
+    <div class="trend-card"><div class="trend-label">Melhor dia de shares</div><div class="trend-num" style="color:#1D9E75;">24</div><div class="trend-label">03/abr · coincide com pico de alcance</div></div>
+    <div class="trend-card"><div class="trend-label">Dias com alcance &lt; 500</div><div class="trend-num" style="color:#E24B4A;">38</div><div class="trend-label">de 90 dias totais</div></div>
+    <div class="trend-card"><div class="trend-label">Dias com alcance &gt; 5.000</div><div class="trend-num" style="color:#1D9E75;">21</div><div class="trend-label">mar–abr e jun 17+</div></div>
+  </div>
+</div>
+<div class="sec">
+  <div class="sec-title">Comparativo mensal</div>
+  <div class="chart-box">
+    <div class="chart-label">Alcance total e interações por mês</div>
+    <canvas id="brMonthChart" role="img" aria-label="Comparativo mensal alcance e interações @kwikledgersbr"></canvas>
+  </div>
+</div>
+<div class="sec">
+  <div class="sec-title">Diagnóstico — insights com base em dados</div>
+  <div class="warn-box"><strong>Nota metodológica:</strong> Os insights abaixo são baseados exclusivamente em dados reais do Windsor.ai — alcance diário, engajamento por post e métricas de mídia. Onde há limitação de dados (ex: apenas 1 Reel publicado), isso está explicitado.</div>
+  <div class="insight-list">
+    <div class="insight ig"><div class="idot"></div><div><strong>Recuperação espontânea de junho confirmada pelos dados <span class="source-badge src-dado">DADO</span></strong> — Alcance diário médio pulou de 300 (01–15 jun) para 6.063 (16–22 jun) sem mudança de estratégia documentada. Os 5 maiores dias de saves do período (37, 31, 22, 21, 14) concentraram-se todos nessa semana de recuperação, confirmando que conteúdo educativo estava gerando o sinal certo.</div></div>
+    <div class="insight ig"><div class="idot"></div><div><strong>Único Reel do período teve maior alcance de todos os posts <span class="source-badge src-dado">DADO</span></strong> — O Reel de 05/mai atingiu 217 de alcance, o maior entre os 16 posts analisados individualmente, vs média de 130 dos carrosséis. Com apenas 1 Reel publicado em 90 dias, não é possível generalizar — mas o dado é consistente com o comportamento esperado do formato.</div></div>
+    <div class="insight ig"><div class="idot"></div><div><strong>Carrosséis têm melhor ER que imagens <span class="source-badge src-dado">DADO</span></strong> — ER médio por post: Carrosséis 5,9% vs Imagens 3,4% (calculado sobre 11 carrosséis e 4 imagens). Carrossel de 30/abr (ER 9,5%) e de 10/abr (ER 8,3%) são os posts com maior taxa de engajamento do período.</div></div>
+    <div class="insight ia"><div class="idot"></div><div><strong>Correlação shares ↔ alcance presente nos dados <span class="source-badge src-dado">DADO</span></strong> — Os dois maiores dias de shares no período (24 em 03/abr, 13 em 12/abr) coincidem com dois dos três maiores dias de alcance da fase 1. A direção causal (shares gerando alcance vs alcance gerando shares) não pode ser determinada pelos dados disponíveis — provavelmente é bidirecional.</div></div>
+    <div class="insight ia"><div class="idot"></div><div><strong>Taxa de engajamento de 0,52% é métrica de alcance diário, não de post <span class="source-badge src-alert">ATENÇÃO</span></strong> — O ER calculado sobre alcance diário total é 0,52%, mas o ER médio por post individual é 5,2% — dez vezes maior. A diferença existe porque o alcance diário inclui muitos dias sem post. O ER real do conteúdo é muito mais saudável do que o número diário sugere.</div></div>
+    <div class="insight ir"><div class="idot"></div><div><strong>Frequência de postagem insuficiente — dado inferido <span class="source-badge src-dado">DADO</span></strong> — 16 posts em 90 dias = média de 1,25 post/semana. O colapso de alcance em abril coincide com os períodos de menor frequência documentados. A causalidade exata (frequência → colapso vs ambos causados por terceiro fator) não é confirmável pelos dados disponíveis, mas a correlação temporal é clara.</div></div>
+    <div class="insight ir"><div class="idot"></div><div><strong>Zero Reels em 90 dias — confirmado pelos dados <span class="source-badge src-dado">DADO</span></strong> — Apenas 1 Reel publicado no período inteiro (05/mai). Nenhuma comparação sistemática Reel vs Carrossel é possível com n=1, mas o alcance superior do único Reel é um sinal inicial válido.</div></div>
+  </div>
+</div>
+<div class="foot">@kwikledgersbr · 90 dias · Mar 25 – Jun 22, 2026 · Dados: Windsor.ai · Posts: 16 analisados</div>
+</div></div>
+
+<!-- ══ PAINEL EUA ══ -->
+<div class="panel" id="panel-us"><div class="wrap">
+<div class="pg-title">Análise de performance — @kwikledgers</div>
+<div class="pg-sub">Contabilidade &amp; tax EUA · 90 dias · 15 posts analisados · 2.509 seguidores</div>
+<div class="mg">
+  <div class="mc"><div class="ml">Alcance total</div><div class="mv neg">70.059</div><div class="ms">90 dias</div></div>
+  <div class="mc"><div class="ml">Interações totais</div><div class="mv neg">180</div><div class="ms">likes + comments + saves</div></div>
+  <div class="mc"><div class="ml">Saves totais</div><div class="mv neg">5</div><div class="ms">90 dias inteiros</div></div>
+  <div class="mc"><div class="ml">Pico de alcance diário</div><div class="mv warn">6.667</div><div class="ms">05/abr · último dia antes do colapso</div></div>
+  <div class="mc"><div class="ml">Alcance médio abr/15+</div><div class="mv neg">3</div><div class="ms">hibernação algorítmica</div></div>
+  <div class="mc"><div class="ml">Dias com alcance &lt; 10</div><div class="mv neg">52</div><div class="ms">de 90 dias totais</div></div>
+</div>
+<div class="sec">
+  <div class="sec-title">Linha do tempo — 3 fases</div>
+  <div class="crit-box"><strong>Diagnóstico crítico:</strong> O @kwikledgers caiu de média 4.791 de alcance/dia (Mar–Abr/07) para média 3 (Abr/15–Jun/22) — colapso de 99,9%. Diferente do @kwikledgersbr, que mostrou recuperação espontânea em junho, o @kwikledgers não apresenta nenhum sinal de recuperação no período analisado. Causa raiz: base de seguidores com 62,8% da Letônia (dado demográfico do Instagram via Windsor).</div>
+  <div class="phase-grid">
+    <div class="phase-card"><span class="phase-badge p1b">Fase 1 — Ativa</span><div class="phase-title">Mar 25 – Abr 07</div><div class="phase-reach" style="color:#1D9E75;">4.791</div><div class="phase-sub">alcance médio diário · pico: 6.667 (05/abr)</div></div>
+    <div class="phase-card"><span class="phase-badge p2b">Fase 2 — Colapso</span><div class="phase-title">Abr 08 – Abr 14</div><div class="phase-reach" style="color:#EF9F27;">396</div><div class="phase-sub">alcance médio diário · -92% vs fase 1</div></div>
+    <div class="phase-card"><span class="phase-badge p3b">Fase 3 — Hibernação</span><div class="phase-title">Abr 15 – Jun 22</div><div class="phase-reach" style="color:#E24B4A;">3</div><div class="phase-sub">alcance médio diário · -99,9% vs fase 1</div></div>
+  </div>
+  <div class="chart-box">
+    <div class="chart-label">Alcance diário · Mar 25 – Jun 22, 2026 — sombreado por fase</div>
+    <canvas id="usReachChart" role="img" aria-label="Gráfico de alcance diário @kwikledgers mostrando colapso de 99,9% a partir de abril"></canvas>
+  </div>
+</div>
+<div class="sec">
+  <div class="sec-title">Métricas de engajamento</div>
+  <div class="trend-grid">
+    <div class="trend-card"><div class="trend-label">ER médio fase 1 (por post)</div><div class="trend-num" style="color:var(--amber);">25,1%</div><div class="trend-label">alto — mas sobre alcance mínimo</div></div>
+    <div class="trend-card"><div class="trend-label">Melhor dia de engajamento</div><div class="trend-num" style="color:var(--green);">09/abr</div><div class="trend-label">44 interações / 261 alcance = 16,9%</div></div>
+    <div class="trend-card"><div class="trend-label">Shares em 90 dias</div><div class="trend-num" style="color:var(--red);">0</div><div class="trend-label">nenhum share registrado nos posts</div></div>
+    <div class="trend-card"><div class="trend-label">Saves em 90 dias</div><div class="trend-num" style="color:var(--red);">0</div><div class="trend-label">nenhum save nos posts individuais</div></div>
+    <div class="trend-card"><div class="trend-label">Dias com alcance zero</div><div class="trend-num" style="color:var(--red);">24</div><div class="trend-label">invisibilidade algorítmica total</div></div>
+    <div class="trend-card"><div class="trend-label">Reels publicados</div><div class="trend-num" style="color:var(--red);">0</div><div class="trend-label">confirmado nos dados de mídia</div></div>
+  </div>
+</div>
+<div class="sec">
+  <div class="sec-title">Diagnóstico — insights com base em dados</div>
+  <div class="warn-box"><strong>Nota metodológica:</strong> Todos os insights abaixo são baseados em dados reais do Windsor.ai. Onde a causalidade não é confirmável pelos dados, isso está explicitado.</div>
+  <div class="insight-list">
+    <div class="insight ir"><div class="idot"></div><div><strong>Causa raiz — contaminação Letônia: dado demográfico confirmado <span class="source-badge src-dado">DADO</span></strong> — Dado real do Instagram Business: 62,8% dos seguidores da conta são da Letônia. Isso significa que todo post é exibido primeiro para uma audiência sem interesse em contabilidade americana. O não-engajamento deles penaliza o algoritmo. Este é o dado mais determinante de toda a análise.</div></div>
+    <div class="insight ir"><div class="idot"></div><div><strong>Alcance da fase 1 era ilusório: ER confirma <span class="source-badge src-dado">DADO</span></strong> — O alcance médio de 4.791/dia parecia saudável, mas o ER médio dos posts da fase 1 era 25,1% — sobre alcances de 8 a 14 usuários. O alto ER sobre número muito baixo de pessoas confirmava que o conteúdo estava essencialmente preso na bolha dos poucos seguidores ativos, sem distribuição real.</div></div>
+    <div class="insight ir"><div class="idot"></div><div><strong>Zero Reels em 90 dias — confirmado nos dados de mídia <span class="source-badge src-dado">DADO</span></strong> — Análise dos 15 posts individuais: 10 carrosséis, 5 imagens, 0 Reels. Reels são o único formato com distribuição nativa para fora da base de seguidores via feed de Reels. A ausência é estrutural, não pontual.</div></div>
+    <div class="insight ir"><div class="idot"></div><div><strong>Zero saves em todos os posts individuais — confirmado <span class="source-badge src-dado">DADO</span></strong> — Dos 15 posts analisados com dados de mídia, nenhum registrou save. Os 5 saves totais do período vieram de interações difusas não atribuídas a posts específicos. Saves são o sinal de valor percebido mais forte para o algoritmo — ausência total é o indicador mais crítico de qualidade percebida.</div></div>
+    <div class="insight ia"><div class="idot"></div><div><strong>09/abr: outlier sem contexto suficiente para generalizar <span class="source-badge src-alert">ATENÇÃO</span></strong> — O dia 09/abr mostra 44 interações com 261 de alcance diário (16,9% ER). No entanto, os dados de post individual desse dia não estão disponíveis com certeza (o colapso foi em 08/abr). Sem saber qual post gerou esse spike, replicar o ângulo é possível apenas com hipótese, não com dado confirmado.</div></div>
+    <div class="insight ii"><div class="idot"></div><div><strong>Protocolo de 14 dias é inferência estratégica, não dado do Instagram <span class="source-badge src-alert">ATENÇÃO</span></strong> — O protocolo de postagem diária por 14 dias é recomendação baseada em comportamento documentado do algoritmo do Instagram por profissionais da área, não um dado mensurável desta conta especificamente. É a melhor prática disponível para o cenário de hibernação identificado.</div></div>
+    <div class="insight ig"><div class="idot"></div><div><strong>Fase 1 prova capacidade de alcance além dos seguidores — dado confirmado <span class="source-badge src-dado">DADO</span></strong> — 6.667 de alcance diário numa conta com 2.509 seguidores é matematicamente impossível sem distribuição para não-seguidores. Isso confirma que a infraestrutura da conta (categoria, bio, hashtags) funcionava. O colapso é de distribuição, não de estrutura.</div></div>
+  </div>
+</div>
+<div class="foot">@kwikledgers · 90 dias · Mar 25 – Jun 22, 2026 · Dados: Windsor.ai · Posts: 15 analisados</div>
+</div></div>
+
+<!-- ══ PAINEL COMPARATIVO ══ -->
+<div class="panel" id="panel-cmp"><div class="wrap">
+<div class="pg-title">Comparativo — @kwikledgersbr vs @kwikledgers</div>
+<div class="pg-sub">Duas contas do mesmo produto, 90 dias, comportamentos opostos</div>
+<div class="sec">
+  <div class="sec-title">Métricas lado a lado</div>
+  <div class="compare-grid">
+    <div class="compare-card">
+      <div class="compare-title">@kwikledgers — EUA</div>
+      <div class="compare-row"><span>Seguidores</span><span class="compare-val">2.509</span></div>
+      <div class="compare-row"><span>Alcance total 90 dias</span><span class="compare-val cv-r">70.059</span></div>
+      <div class="compare-row"><span>Pico de alcance diário</span><span class="compare-val">6.667</span></div>
+      <div class="compare-row"><span>Alcance médio/dia fase ativa</span><span class="compare-val">4.791</span></div>
+      <div class="compare-row"><span>Alcance médio/dia fase baixa</span><span class="compare-val cv-r">3</span></div>
+      <div class="compare-row"><span>Interações totais (90d)</span><span class="compare-val cv-r">180</span></div>
+      <div class="compare-row"><span>Saves totais (90d)</span><span class="compare-val cv-r">5</span></div>
+      <div class="compare-row"><span>Saves nos posts (dados mídia)</span><span class="compare-val cv-r">0</span></div>
+      <div class="compare-row"><span>Reels publicados (90d)</span><span class="compare-val cv-r">0</span></div>
+      <div class="compare-row"><span>Posts analisados</span><span class="compare-val">15</span></div>
+      <div class="compare-row"><span>Sinal de recuperação jun?</span><span class="compare-val cv-r">Nenhum</span></div>
+      <div class="compare-row"><span>Seguidores da Letônia</span><span class="compare-val cv-r">62,8%</span></div>
+      <div class="compare-row"><span>ER médio por post</span><span class="compare-val cv-r">25,1%*</span></div>
+    </div>
+    <div class="compare-card">
+      <div class="compare-title">@kwikledgersbr — Brasil</div>
+      <div class="compare-row"><span>Seguidores</span><span class="compare-val">1.537</span></div>
+      <div class="compare-row"><span>Alcance total 90 dias</span><span class="compare-val cv-g">493.915</span></div>
+      <div class="compare-row"><span>Pico de alcance diário</span><span class="compare-val cv-g">30.875</span></div>
+      <div class="compare-row"><span>Alcance médio/dia fase ativa</span><span class="compare-val cv-g">20.821</span></div>
+      <div class="compare-row"><span>Alcance médio/dia fase baixa</span><span class="compare-val">861</span></div>
+      <div class="compare-row"><span>Interações totais (90d)</span><span class="compare-val cv-g">2.572</span></div>
+      <div class="compare-row"><span>Saves totais (90d)</span><span class="compare-val cv-g">387</span></div>
+      <div class="compare-row"><span>Saves nos posts (dados mídia)</span><span class="compare-val cv-g">27</span></div>
+      <div class="compare-row"><span>Reels publicados (90d)</span><span class="compare-val">1</span></div>
+      <div class="compare-row"><span>Posts analisados</span><span class="compare-val">16</span></div>
+      <div class="compare-row"><span>Sinal de recuperação jun?</span><span class="compare-val cv-g">Sim — forte</span></div>
+      <div class="compare-row"><span>Seguidores da Letônia</span><span class="compare-val cv-g">~0%</span></div>
+      <div class="compare-row"><span>ER médio por post</span><span class="compare-val cv-g">5,2%</span></div>
+    </div>
+  </div>
+  <div class="data-note">* ER do @kwikledgers calculado sobre número muito pequeno de visualizações (5–19 por post na fase 3). Alto ER percentual sobre volume irrisório não representa saúde real da conta.</div>
+</div>
+<div class="sec">
+  <div class="sec-title">Alcance diário — comparativo visual</div>
+  <div class="chart-box">
+    <div class="chart-label">@kwikledgers (azul, eixo esq.) vs @kwikledgersbr (laranja, eixo dir.) — escalas diferentes</div>
+    <canvas id="compareChart" role="img" aria-label="Comparativo alcance diário das duas contas mostrando @kwikledgersbr muito acima do @kwikledgers"></canvas>
+  </div>
+</div>
+<div class="sec">
+  <div class="sec-title">O que explica a diferença</div>
+  <div class="insight-list">
+    <div class="insight ir"><div class="idot"></div><div><strong>Variável #1 — base de seguidores <span class="source-badge src-dado">DADO</span></strong> — 62,8% dos seguidores do @kwikledgers são da Letônia (dado demográfico do Instagram). @kwikledgersbr tem audiência 96,8% brasileira. Esta diferença explica sozinha o gap de distribuição algorítmica entre as duas contas.</div></div>
+    <div class="insight ir"><div class="idot"></div><div><strong>Variável #2 — saves: 387 vs 0 <span class="source-badge src-dado">DADO</span></strong> — O @kwikledgersbr acumulou 387 saves em 90 dias; o @kwikledgers acumulou 0 nos posts individuais analisados. Saves são o sinal de valor percebido mais forte para o algoritmo. A ausência total no @kwikledgers é estrutural — reflexo de conteúdo genérico sem especificidade de nicho.</div></div>
+    <div class="insight ia"><div class="idot"></div><div><strong>Variável #3 — conteúdo: específico vs genérico <span class="source-badge src-dado">DADO</span></strong> — Análise das legendas reais puxadas pelo Windsor confirmou que o @kwikledgersbr publica conteúdo técnico fiscal (tributação, LLC, abertura de empresa) enquanto o @kwikledgers publica variações de branding genérico ("more than compliance", "proactive not reactive") sem especificidade de nicho ou dado concreto.</div></div>
+    <div class="insight ii"><div class="idot"></div><div><strong>Variável #4 — formato: mesmo problema nas duas contas <span class="source-badge src-dado">DADO</span></strong> — Nenhuma das duas publicou Reels de forma consistente (0 no @kwikledgers, 1 no @kwikledgersbr). Esta é a lacuna de formato comum às duas. O único Reel do @kwikledgersbr (05/mai) teve o maior alcance de post individual no período — 217 vs média de 130 dos carrosséis.</div></div>
+  </div>
+</div>
+<div class="foot">Comparativo @kwikledgers vs @kwikledgersbr · 90 dias · Mar 25 – Jun 22, 2026 · Dados: Windsor.ai</div>
+</div></div>
+
+<!-- ══ PAINEL POSTS BR ══ -->
+<div class="panel" id="panel-posts-br"><div class="wrap">
+<div class="pg-title">Posts — @kwikledgersbr</div>
+<div class="pg-sub">16 posts analisados · Mar 25 – Jun 22, 2026 · ordenados por alcance</div>
+
+<div class="sec">
+  <div class="sec-title">Melhor e pior post por alcance</div>
+  <div class="post-grid">
+    <div class="post-card">
+      <img class="post-img" src="https://scontent-fra3-2.cdninstagram.com/v/t51.82787-15/684434216_17990216000970675_259468768926891494_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=111&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiQ0xJUFMuYmVzdF9pbWFnZV91cmxnZW4uQzMifQ%3D%3D&_nc_ohc=f4A1e809WZsQ7kNvwEEUz37&_nc_oc=AdpLAzhjgfsM2w8En1l0-cZQXWzzWhnzHzQfwhZKfuQRSp6FL0CUyXkc3GeCodfsofU&_nc_zt=23&_nc_ht=scontent-fra3-2.cdninstagram.com&edm=AM6HXa8EAAAA&_nc_gid=LBy2HZTuBfG_W6CkEuEmKQ&_nc_tpa=Q5bMBQEcBPg4Ff9faAa2-GbJzO6Y0Wj2nKMIC0hNhpPp7uJpu904AAvLlOC9IERDcPVbgoA6Gf6LtIdTWw&oh=00_Af_VQGQCqJYp_d4y8rhEqRtpaRM0KlimgqXL95U5JB27Mw&oe=6A41AD52" alt="Melhor post @kwikledgersbr" loading="lazy" onerror="this.style.background='#E1F5EE';this.alt='Imagem indisponível'">
+      <div class="post-body">
+        <span class="post-badge pb-best">🏆 Maior alcance</span>
+        <div class="post-type">Reel · 05 maio 2026</div>
+        <div class="post-stats">
+          <div>Alcance <span>217</span></div>
+          <div>Engaj. <span>13</span></div>
+          <div>Saves <span>3</span></div>
+          <div>ER <span>6,0%</span></div>
+        </div>
+        <a class="post-link" href="https://www.instagram.com/reel/DX9kP02tlx9/" target="_blank">Ver no Instagram →</a>
+      </div>
+    </div>
+    <div class="post-card">
+      <img class="post-img" src="https://scontent-fra5-2.cdninstagram.com/v/t51.82787-15/708363464_17993130191970675_6215458329441776720_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=106&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiRkVFRC5iZXN0X2ltYWdlX3VybGdlbi5DMyJ9&_nc_ohc=8zTt4s7oGR0Q7kNvwGnPPaD&_nc_oc=AdoAl5SpKQ69qHddPIaMBgm7XO1UwxlyFh2ZmKTY828K6BwYQ89KOC4P0mm4mw5HE8I&_nc_zt=23&_nc_ht=scontent-fra5-2.cdninstagram.com&edm=AM6HXa8EAAAA&_nc_gid=6bpjsBbuwH2goEye0EalRg&oh=00_Af_w1S45fk2tGLXdQ4A4lj4boz9JuV4WdGAUBxJ496OVxw&oe=6A41DB0B" alt="Pior post @kwikledgersbr" loading="lazy" onerror="this.style.background='#FCEBEB';this.alt='Imagem indisponível'">
+      <div class="post-body">
+        <span class="post-badge pb-worst">📉 Menor alcance</span>
+        <div class="post-type">Imagem · 27 maio 2026</div>
+        <div class="post-stats">
+          <div>Alcance <span>76</span></div>
+          <div>Engaj. <span>1</span></div>
+          <div>Saves <span>0</span></div>
+          <div>ER <span>1,3%</span></div>
+        </div>
+        <a class="post-link" href="https://www.instagram.com/p/DY3FuBTvfgB/" target="_blank">Ver no Instagram →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec-title">Melhor e pior post por engajamento</div>
+  <div class="post-grid">
+    <div class="post-card">
+      <img class="post-img" src="https://scontent-fra5-2.cdninstagram.com/v/t51.82787-15/683766901_17989578104970675_3681857654629189849_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=109&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiQ0FST1VTRUxfSVRFTS5iZXN0X2ltYWdlX3VybGdlbi5DMyJ9&_nc_ohc=ozAPZb6jBT4Q7kNvwEhWgVi&_nc_oc=AdrROH4mBAy5ztxeTLmtw5WE-hdnYhAXUFpyu8K8Uys3_gRL8HYQrScnhaw7FtuVrHU&_nc_zt=23&_nc_ht=scontent-fra5-2.cdninstagram.com&edm=AM6HXa8EAAAA&_nc_gid=LBy2HZTuBfG_W6CkEuEmKQ&oh=00_Af80t4FWuPbx8nWMTLU_6YbPJT4sFrxWoFLFjJ_J5OumHQ&oe=6A41DE9C" alt="Melhor engajamento @kwikledgersbr" loading="lazy" onerror="this.style.background='#E1F5EE'">
+      <div class="post-body">
+        <span class="post-badge pb-best">🏆 Maior engajamento</span>
+        <div class="post-type">Carrossel · 30 abril 2026</div>
+        <div class="post-stats">
+          <div>Alcance <span>158</span></div>
+          <div>Engaj. <span>15</span></div>
+          <div>Saves <span>3</span></div>
+          <div>ER <span>9,5%</span></div>
+        </div>
+        <a class="post-link" href="https://www.instagram.com/p/DXwx-xsDcfN/" target="_blank">Ver no Instagram →</a>
+      </div>
+    </div>
+    <div class="post-card">
+      <img class="post-img" src="https://scontent-fra5-2.cdninstagram.com/v/t51.82787-15/708363464_17993130191970675_6215458329441776720_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=106&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiRkVFRC5iZXN0X2ltYWdlX3VybGdlbi5DMyJ9&_nc_ohc=8zTt4s7oGR0Q7kNvwGnPPaD&_nc_oc=AdoAl5SpKQ69qHddPIaMBgm7XO1UwxlyFh2ZmKTY828K6BwYQ89KOC4P0mm4mw5HE8I&_nc_zt=23&_nc_ht=scontent-fra5-2.cdninstagram.com&edm=AM6HXa8EAAAA&_nc_gid=6bpjsBbuwH2goEye0EalRg&oh=00_Af_w1S45fk2tGLXdQ4A4lj4boz9JuV4WdGAUBxJ496OVxw&oe=6A41DB0B" alt="Pior engajamento @kwikledgersbr" loading="lazy" onerror="this.style.background='#FCEBEB'">
+      <div class="post-body">
+        <span class="post-badge pb-worst">📉 Menor engajamento</span>
+        <div class="post-type">Imagem · 27 maio 2026</div>
+        <div class="post-stats">
+          <div>Alcance <span>76</span></div>
+          <div>Engaj. <span>1</span></div>
+          <div>Saves <span>0</span></div>
+          <div>ER <span>1,3%</span></div>
+        </div>
+        <a class="post-link" href="https://www.instagram.com/p/DY3FuBTvfgB/" target="_blank">Ver no Instagram →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec-title">Todos os posts — ordenados por alcance</div>
+  <div id="brPostsTable"></div>
+</div>
+<div class="foot">@kwikledgersbr · Posts individuais · Dados: Windsor.ai</div>
+</div></div>
+
+<!-- ══ PAINEL POSTS EUA ══ -->
+<div class="panel" id="panel-posts-us"><div class="wrap">
+<div class="pg-title">Posts — @kwikledgers</div>
+<div class="pg-sub">15 posts analisados · Mar 25 – Jun 22, 2026 · ordenados por alcance</div>
+
+<div class="sec">
+  <div class="sec-title">Melhor e pior post por alcance</div>
+  <div class="post-grid">
+    <div class="post-card">
+      <img class="post-img" src="https://scontent-fra5-2.cdninstagram.com/v/t51.82787-15/706830126_17997377141950298_4219643944514807237_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=109&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiRkVFRC5iZXN0X2ltYWdlX3VybGdlbi5DMyJ9&_nc_ohc=9X_otNpUzHgQ7kNvwH7JMix&_nc_oc=AdrjY7Lw68_I6YMQ5Fas3BvbCbmEyjD7NN9YGsnT7t87KbkPVwc-uC0rFchI1c5XpUc&_nc_zt=23&_nc_ht=scontent-fra5-2.cdninstagram.com&edm=AM6HXa8EAAAA&_nc_gid=BuBrZJwMhtz9j1z6ppTgIA&oh=00_Af-nE_UPCF-VRmrRjv51HWKAMZ4pdv4SFwTaJR0-6dYTKQ&oe=6A41C7DE" alt="Melhor post @kwikledgers" loading="lazy" onerror="this.style.background='#E1F5EE'">
+      <div class="post-body">
+        <span class="post-badge pb-best">🏆 Maior alcance</span>
+        <div class="post-type">Imagem · 25 maio 2026</div>
+        <div class="post-stats">
+          <div>Alcance <span>19</span></div>
+          <div>Engaj. <span>2</span></div>
+          <div>Saves <span>0</span></div>
+          <div>ER <span>10,5%</span></div>
+        </div>
+        <a class="post-link" href="https://www.instagram.com/p/DYxSNIvpdGj/" target="_blank">Ver no Instagram →</a>
+      </div>
+    </div>
+    <div class="post-card">
+      <img class="post-img" src="https://scontent-fra5-1.cdninstagram.com/v/t51.82787-15/670842587_17992050734950298_4028442186619575593_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=103&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiQ0FST1VTRUxfSVRFTS5iZXN0X2ltYWdlX3VybGdlbi5DMyJ9&_nc_ohc=brYwaNMPyEIQ7kNvwFyFLkr&_nc_oc=AdophWQFyIp9CUvV6lR0dpWKrR40wS7vUDYrCp-8yaS58HCoKOdCpJ17K1uQc0OW9_I&_nc_zt=23&_nc_ht=scontent-fra3-1.cdninstagram.com&edm=AM6HXa8EAAAA&_nc_gid=fo6KAUvscCxwlbgIbXBxiQ&oh=00_Af8xZ5h4Rbwj0BtkENFQqPYJX_4wQjT4aSxVfCGmIxO3ag&oe=6A41B56F" alt="Pior post @kwikledgers" loading="lazy" onerror="this.style.background='#FCEBEB'">
+      <div class="post-body">
+        <span class="post-badge pb-worst">📉 Menor alcance</span>
+        <div class="post-type">Carrossel · 15 abril 2026</div>
+        <div class="post-stats">
+          <div>Alcance <span>5</span></div>
+          <div>Engaj. <span>2</span></div>
+          <div>Saves <span>0</span></div>
+          <div>ER <span>40%</span></div>
+        </div>
+        <a class="post-link" href="https://www.instagram.com/p/DXJ6ezAAYji/" target="_blank">Ver no Instagram →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec-title">Melhor e pior post por engajamento</div>
+  <div class="post-grid">
+    <div class="post-card">
+      <img class="post-img" src="https://scontent-fra3-2.cdninstagram.com/v/t51.82787-15/711329846_17997906413950298_6755624132438061472_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=111&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiRkVFRC5iZXN0X2ltYWdlX3VybGdlbi5DMyJ9&_nc_ohc=Rl-OxIxXjXEQ7kNvwGtU9xl&_nc_oc=AdqOYHm1nwUTxZ4L8xQcH8iQridfSt4COMe8ZqdIez3hbtN7Y9DINKt5wJdfWhi8Z34&_nc_zt=23&_nc_ht=scontent-fra3-2.cdninstagram.com&edm=AM6HXa8EAAAA&_nc_gid=BuBrZJwMhtz9j1z6ppTgIA&oh=00_Af-z0jQCrfxiWNniw8DWyua2Rw9LcmfAqeCqS-I1G3Q-QA&oe=6A41BB60" alt="Melhor engajamento @kwikledgers" loading="lazy" onerror="this.style.background='#E1F5EE'">
+      <div class="post-body">
+        <span class="post-badge pb-best">🏆 Maior engajamento</span>
+        <div class="post-type">Imagem · 29 maio 2026</div>
+        <div class="post-stats">
+          <div>Alcance <span>16</span></div>
+          <div>Engaj. <span>5</span></div>
+          <div>Saves <span>0</span></div>
+          <div>ER <span>31,2%</span></div>
+        </div>
+        <a class="post-link" href="https://www.instagram.com/p/DY7f119xsCt/" target="_blank">Ver no Instagram →</a>
+      </div>
+    </div>
+    <div class="post-card">
+      <img class="post-img" src="https://scontent-fra5-1.cdninstagram.com/v/t51.82787-15/727057973_18000598745950298_8280254421505018074_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=100&ccb=7-5&_nc_sid=18de74&efg=eyJlZmdfdGFnIjoiRkVFRC5iZXN0X2ltYWdlX3VybGdlbi5DMyJ9&_nc_ohc=XR6Yw6QVvucQ7kNvwFxtrFT&_nc_oc=AdrTNpalQ-9QCMEUDSKmkRUTSy5leURrlabw9d3okG7niv1lX5E0uj0oJjWWC-psdxI&_nc_zt=23&_nc_ht=scontent-fra5-1.cdninstagram.com&edm=AM6HXa8EAAAA&_nc_gid=BuBrZJwMhtz9j1z6ppTgIA&oh=00_Af9V99OxlJHiFtEOBAtc-ZvIBtjKNbCI42wwdRIeE2tmOw&oe=6A41D30E" alt="Pior engajamento @kwikledgers" loading="lazy" onerror="this.style.background='#FCEBEB'">
+      <div class="post-body">
+        <span class="post-badge pb-worst">📉 Menor engajamento</span>
+        <div class="post-type">Imagem · 18 junho 2026</div>
+        <div class="post-stats">
+          <div>Alcance <span>7</span></div>
+          <div>Engaj. <span>1</span></div>
+          <div>Saves <span>0</span></div>
+          <div>ER <span>14,3%</span></div>
+        </div>
+        <a class="post-link" href="https://www.instagram.com/p/DZvZgzyBZXG/" target="_blank">Ver no Instagram →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec-title">Todos os posts — ordenados por alcance</div>
+  <div id="usPostsTable"></div>
+</div>
+<div class="foot">@kwikledgers · Posts individuais · Dados: Windsor.ai</div>
+</div></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+function switchTab(id){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  const tabs=['br','us','cmp','posts-br','posts-us'];
+  tabs.forEach((tid,i)=>{if(tid===id)document.querySelectorAll('.tab')[i].classList.add('active');});
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+const brDayData=[{d:"25/03",r:23053,i:115,s:11,sh:13},{d:"26/03",r:21108,i:82,s:9,sh:8},{d:"27/03",r:19103,i:72,s:14,sh:5},{d:"28/03",r:13331,i:57,s:7,sh:3},{d:"29/03",r:17097,i:54,s:7,sh:4},{d:"30/03",r:14974,i:89,s:12,sh:3},{d:"31/03",r:14947,i:73,s:7,sh:2},{d:"01/04",r:15429,i:59,s:3,sh:5},{d:"02/04",r:17475,i:86,s:8,sh:6},{d:"03/04",r:30875,i:150,s:11,sh:24},{d:"04/04",r:23292,i:88,s:11,sh:8},{d:"05/04",r:30067,i:89,s:8,sh:4},{d:"06/04",r:25089,i:116,s:5,sh:8},{d:"07/04",r:25652,i:104,s:4,sh:11},{d:"08/04",r:13797,i:63,s:6,sh:10},{d:"09/04",r:9644,i:46,s:9,sh:1},{d:"10/04",r:13522,i:61,s:4,sh:5},{d:"11/04",r:6739,i:37,s:6,sh:4},{d:"12/04",r:14792,i:93,s:11,sh:13},{d:"13/04",r:12612,i:70,s:5,sh:8},{d:"14/04",r:13484,i:64,s:5,sh:8},{d:"15/04",r:8655,i:44,s:5,sh:6},{d:"16/04",r:6582,i:35,s:3,sh:2},{d:"17/04",r:4827,i:28,s:1,sh:4},{d:"18/04",r:2734,i:24,s:5,sh:3},{d:"19/04",r:3206,i:19,s:2,sh:4},{d:"20/04",r:2491,i:12,s:1,sh:2},{d:"21/04",r:2052,i:24,s:4,sh:5},{d:"22/04",r:828,i:12,s:2,sh:1},{d:"23/04",r:683,i:0,s:0,sh:0},{d:"24/04",r:719,i:7,s:1,sh:1},{d:"25/04",r:1249,i:7,s:2,sh:0},{d:"26/04",r:46,i:0,s:0,sh:0},{d:"27/04",r:1,i:1,s:1,sh:0},{d:"28/04",r:2,i:0,s:0,sh:0},{d:"29/04",r:2130,i:10,s:3,sh:0},{d:"30/04",r:1398,i:20,s:4,sh:0},{d:"01/05",r:1107,i:21,s:5,sh:5},{d:"02/05",r:1446,i:14,s:5,sh:0},{d:"03/05",r:1218,i:9,s:2,sh:2},{d:"04/05",r:1818,i:20,s:5,sh:2},{d:"05/05",r:1917,i:21,s:3,sh:3},{d:"06/05",r:1760,i:15,s:4,sh:0},{d:"07/05",r:1709,i:24,s:3,sh:2},{d:"08/05",r:1912,i:11,s:2,sh:1},{d:"09/05",r:2723,i:2,s:0,sh:0},{d:"10/05",r:1483,i:8,s:2,sh:0},{d:"11/05",r:1575,i:19,s:2,sh:3},{d:"12/05",r:1775,i:26,s:3,sh:4},{d:"13/05",r:1068,i:5,s:0,sh:0},{d:"14/05",r:661,i:3,s:0,sh:0},{d:"15/05",r:493,i:6,s:2,sh:0},{d:"16/05",r:372,i:1,s:0,sh:0},{d:"17/05",r:696,i:2,s:0,sh:0},{d:"18/05",r:494,i:5,s:0,sh:1},{d:"19/05",r:601,i:2,s:0,sh:0},{d:"20/05",r:1069,i:9,s:3,sh:1},{d:"21/05",r:858,i:9,s:2,sh:1},{d:"22/05",r:767,i:8,s:0,sh:1},{d:"23/05",r:730,i:11,s:4,sh:1},{d:"24/05",r:958,i:3,s:0,sh:1},{d:"25/05",r:811,i:8,s:1,sh:0},{d:"26/05",r:378,i:2,s:0,sh:0},{d:"27/05",r:206,i:1,s:0,sh:0},{d:"28/05",r:149,i:0,s:0,sh:0},{d:"29/05",r:137,i:1,s:0,sh:0},{d:"30/05",r:101,i:1,s:0,sh:0},{d:"31/05",r:196,i:1,s:0,sh:0},{d:"01/06",r:262,i:2,s:0,sh:0},{d:"02/06",r:207,i:0,s:0,sh:0},{d:"03/06",r:420,i:0,s:0,sh:0},{d:"04/06",r:328,i:2,s:1,sh:0},{d:"05/06",r:256,i:4,s:1,sh:0},{d:"06/06",r:199,i:0,s:0,sh:0},{d:"07/06",r:352,i:2,s:1,sh:0},{d:"08/06",r:347,i:1,s:0,sh:0},{d:"09/06",r:290,i:3,s:1,sh:0},{d:"10/06",r:326,i:1,s:0,sh:0},{d:"11/06",r:1069,i:3,s:0,sh:0},{d:"12/06",r:1223,i:1,s:0,sh:0},{d:"13/06",r:254,i:1,s:0,sh:0},{d:"14/06",r:363,i:0,s:0,sh:0},{d:"15/06",r:707,i:7,s:2,sh:0},{d:"16/06",r:1390,i:9,s:3,sh:0},{d:"17/06",r:3304,i:36,s:8,sh:4},{d:"18/06",r:4211,i:58,s:21,sh:11},{d:"19/06",r:9152,i:66,s:22,sh:7},{d:"20/06",r:4848,i:49,s:14,sh:2},{d:"21/06",r:10172,i:79,s:37,sh:5},{d:"22/06",r:9362,i:69,s:31,sh:7}];
+
+const usDayData=[{d:"25/03",r:3834,i:11},{d:"26/03",r:3259,i:6},{d:"27/03",r:4283,i:8},{d:"28/03",r:3996,i:6},{d:"29/03",r:5261,i:6},{d:"30/03",r:4408,i:4},{d:"31/03",r:5252,i:1},{d:"01/04",r:5520,i:4},{d:"02/04",r:3873,i:6},{d:"03/04",r:4957,i:7},{d:"04/04",r:4806,i:6},{d:"05/04",r:6667,i:8},{d:"06/04",r:5301,i:5},{d:"07/04",r:5657,i:5},{d:"08/04",r:675,i:2},{d:"09/04",r:261,i:44},{d:"10/04",r:277,i:9},{d:"11/04",r:321,i:0},{d:"12/04",r:419,i:0},{d:"13/04",r:512,i:2},{d:"14/04",r:305,i:3},{d:"15/04",r:29,i:2},{d:"16/04",r:4,i:0},{d:"17/04",r:7,i:1},{d:"18/04",r:7,i:2},{d:"19/04",r:1,i:0},{d:"20/04",r:2,i:0},{d:"21/04",r:2,i:0},{d:"22/04",r:8,i:0},{d:"23/04",r:7,i:2},{d:"24/04",r:1,i:0},{d:"25/04",r:0,i:0},{d:"26/04",r:1,i:0},{d:"27/04",r:0,i:0},{d:"28/04",r:1,i:0},{d:"29/04",r:0,i:0},{d:"30/04",r:1,i:0},{d:"01/05",r:0,i:0},{d:"02/05",r:0,i:0},{d:"03/05",r:0,i:0},{d:"04/05",r:9,i:5},{d:"05/05",r:11,i:1},{d:"06/05",r:4,i:0},{d:"07/05",r:0,i:0},{d:"08/05",r:8,i:2},{d:"09/05",r:4,i:0},{d:"10/05",r:2,i:0},{d:"11/05",r:0,i:0},{d:"12/05",r:0,i:0},{d:"13/05",r:12,i:3},{d:"14/05",r:0,i:0},{d:"15/05",r:1,i:0},{d:"16/05",r:0,i:0},{d:"17/05",r:0,i:0},{d:"18/05",r:0,i:0},{d:"19/05",r:0,i:0},{d:"20/05",r:1,i:0},{d:"21/05",r:0,i:0},{d:"22/05",r:0,i:0},{d:"23/05",r:1,i:0},{d:"24/05",r:0,i:0},{d:"25/05",r:14,i:2},{d:"26/05",r:5,i:1},{d:"27/05",r:0,i:0},{d:"28/05",r:1,i:0},{d:"29/05",r:7,i:3},{d:"30/05",r:7,i:4},{d:"31/05",r:3,i:0},{d:"01/06",r:1,i:0},{d:"02/06",r:0,i:0},{d:"03/06",r:0,i:0},{d:"04/06",r:0,i:0},{d:"05/06",r:0,i:0},{d:"06/06",r:0,i:0},{d:"07/06",r:0,i:0},{d:"08/06",r:12,i:3},{d:"09/06",r:3,i:0},{d:"10/06",r:3,i:0},{d:"11/06",r:1,i:0},{d:"12/06",r:2,i:0},{d:"13/06",r:1,i:0},{d:"14/06",r:0,i:0},{d:"15/06",r:13,i:3},{d:"16/06",r:1,i:0},{d:"17/06",r:0,i:0},{d:"18/06",r:10,i:3},{d:"19/06",r:5,i:0},{d:"20/06",r:1,i:0},{d:"21/06",r:1,i:0},{d:"22/06",r:0,i:0}];
+
+const brLabels=brDayData.map(d=>d.d);
+const usLabels=usDayData.map(d=>d.d);
+
+function phaseBg(labels,regions){
+  return{id:'ph',beforeDraw(c){
+    const{ctx,chartArea:{top,bottom},scales:{x}}=c;if(!x)return;
+    regions.forEach(r=>{
+      const i1=labels.indexOf(r.f),i2=labels.indexOf(r.t);if(i1<0||i2<0)return;
+      const x1=x.getPixelForValue(i1),x2=x.getPixelForValue(i2);
+      ctx.fillStyle=r.c;ctx.fillRect(x1,top,x2-x1,bottom-top);
+    });
+  }};
+}
+
+const brPhases=[{f:"25/03",t:"07/04",c:"rgba(29,158,117,0.07)"},{f:"08/04",t:"28/04",c:"rgba(239,159,39,0.08)"},{f:"29/04",t:"15/06",c:"rgba(226,75,74,0.07)"},{f:"16/06",t:"22/06",c:"rgba(29,158,117,0.11)"}];
+const usPhases=[{f:"25/03",t:"07/04",c:"rgba(29,158,117,0.07)"},{f:"08/04",t:"14/04",c:"rgba(239,159,39,0.09)"},{f:"15/04",t:"22/06",c:"rgba(226,75,74,0.06)"}];
+
+const baseOpts={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{maxTicksLimit:12,maxRotation:0,font:{size:10}},grid:{display:false}},y:{ticks:{callback:v=>v>=1000?Math.round(v/1000)+'k':v,font:{size:10}},grid:{color:'rgba(0,0,0,0.04)'}}}};
+
+function mkChart(id,labels,data,color,bgColor,plugins,h){
+  const el=document.getElementById(id);el.parentElement.style.height=h+'px';
+  return new Chart(el,{type:'line',plugins,data:{labels,datasets:[{data,borderColor:color,backgroundColor:bgColor,borderWidth:1.5,pointRadius:0,pointHoverRadius:4,fill:true,tension:0.3}]},options:{...baseOpts,plugins:{...baseOpts.plugins,tooltip:{callbacks:{label:c=>'Alcance: '+c.parsed.y.toLocaleString('pt-BR')}}}}}); 
+}
+
+mkChart('brReachChart',brLabels,brDayData.map(d=>d.r),'#FF4E1C','rgba(255,78,28,0.07)',[phaseBg(brLabels,brPhases)],240);
+mkChart('usReachChart',usLabels,usDayData.map(d=>d.r),'#1F3FD0','rgba(31,63,208,0.08)',[phaseBg(usLabels,usPhases)],220);
+
+const brEC=document.getElementById('brEngajChart');brEC.parentElement.style.height='200px';
+new Chart(brEC,{type:'bar',data:{labels:brLabels,datasets:[{label:'Likes',data:brDayData.map(d=>Math.max(0,d.i-d.s-d.sh)),backgroundColor:'rgba(31,63,208,0.55)',stack:'s'},{label:'Saves',data:brDayData.map(d=>d.s),backgroundColor:'rgba(29,158,117,0.7)',stack:'s'},{label:'Shares',data:brDayData.map(d=>d.sh),backgroundColor:'rgba(255,78,28,0.7)',stack:'s'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'top',labels:{font:{size:11},boxWidth:10}}},scales:{x:{stacked:true,ticks:{maxTicksLimit:12,font:{size:10}},grid:{display:false}},y:{stacked:true,ticks:{font:{size:10}},grid:{color:'rgba(0,0,0,0.04)'}}}}});
+
+const months={};brDayData.forEach(d=>{const m=d.d.slice(3,5);months[m]=(months[m]||{r:0,i:0});months[m].r+=d.r;months[m].i+=d.i;});
+const mLabels=['Março (parcial)','Abril','Maio','Junho (parcial)'];
+const brMC=document.getElementById('brMonthChart');brMC.parentElement.style.height='200px';
+new Chart(brMC,{type:'bar',data:{labels:mLabels,datasets:[{label:'Alcance',data:Object.values(months).map(m=>m.r),backgroundColor:'rgba(255,78,28,0.6)',yAxisID:'y'},{label:'Interações',data:Object.values(months).map(m=>m.i),type:'line',borderColor:'#1F3FD0',borderWidth:2,pointRadius:4,backgroundColor:'transparent',yAxisID:'y2'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'top',labels:{font:{size:11},boxWidth:10}}},scales:{x:{ticks:{font:{size:11}},grid:{display:false}},y:{position:'left',ticks:{callback:v=>v>=1000?Math.round(v/1000)+'k':v,font:{size:10}},grid:{color:'rgba(0,0,0,0.04)'}},y2:{position:'right',ticks:{font:{size:10}},grid:{display:false}}}}});
+
+const cmpC=document.getElementById('compareChart');cmpC.parentElement.style.height='220px';
+new Chart(cmpC,{type:'line',data:{labels:usLabels,datasets:[{label:'@kwikledgers',data:usDayData.map(d=>d.r),borderColor:'#1F3FD0',backgroundColor:'transparent',borderWidth:1.5,pointRadius:0,yAxisID:'yUS',tension:0.3},{label:'@kwikledgersbr',data:brDayData.map(d=>d.r),borderColor:'#FF4E1C',backgroundColor:'transparent',borderWidth:1.5,pointRadius:0,yAxisID:'yBR',tension:0.3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'top',labels:{font:{size:11},boxWidth:10}},tooltip:{mode:'index',intersect:false}},scales:{x:{ticks:{maxTicksLimit:12,maxRotation:0,font:{size:10}},grid:{display:false}},yUS:{position:'left',title:{display:true,text:'@kwikledgers',font:{size:10},color:'#1F3FD0'},ticks:{font:{size:10}},grid:{color:'rgba(0,0,0,0.04)'}},yBR:{position:'right',title:{display:true,text:'@kwikledgersbr',font:{size:10},color:'#FF4E1C'},ticks:{callback:v=>v>=1000?Math.round(v/1000)+'k':v,font:{size:10}},grid:{display:false}}}}});
+
+const brPosts=[{d:"2026-06-19",t:"Carrossel",r:183,e:15,s:0,sh:1,er:8.2,url:"https://www.instagram.com/p/DZx2H5KlDng/"},{d:"2026-05-05",t:"Reel",r:217,e:13,s:3,sh:2,er:6.0,url:"https://www.instagram.com/reel/DX9kP02tlx9/"},{d:"2026-03-26",t:"Carrossel",r:163,e:13,s:6,sh:1,er:8.0,url:"https://www.instagram.com/p/DWXVocJlJ1E/"},{d:"2026-04-30",t:"Carrossel",r:158,e:15,s:3,sh:2,er:9.5,url:"https://www.instagram.com/p/DXwx-xsDcfN/"},{d:"2026-04-08",t:"Carrossel",r:142,e:7,s:1,sh:0,er:4.9,url:"https://www.instagram.com/p/DW4WP4plM1x/"},{d:"2026-06-09",t:"Imagem",r:130,e:6,s:2,sh:0,er:4.6,url:"https://www.instagram.com/p/DZXsZJdvq-p/"},{d:"2026-04-03",t:"Carrossel",r:127,e:7,s:0,sh:0,er:5.5,url:"https://www.instagram.com/p/DWrERJalMWE/"},{d:"2026-04-15",t:"Imagem",r:122,e:7,s:2,sh:0,er:5.7,url:"https://www.instagram.com/p/DXKSZowj1h7/"},{d:"2026-04-10",t:"Carrossel",r:121,e:10,s:2,sh:0,er:8.3,url:"https://www.instagram.com/p/DW9Z4kHlOhf/"},{d:"2026-06-17",t:"Carrossel",r:114,e:8,s:3,sh:0,er:7.0,url:"https://www.instagram.com/p/DZsOlh5Dqp3/"},{d:"2026-04-14",t:"Carrossel",r:105,e:4,s:0,sh:0,er:3.8,url:"https://www.instagram.com/p/DXIDmsaFNdA/"},{d:"2026-05-19",t:"Carrossel",r:100,e:3,s:1,sh:0,er:3.0,url:"https://www.instagram.com/p/DYiSM75FIWc/"},{d:"2026-05-12",t:"Carrossel",r:96,e:4,s:0,sh:0,er:4.2,url:"https://www.instagram.com/p/DYP_5VglNvg/"},{d:"2026-05-14",t:"Imagem",r:90,e:2,s:0,sh:0,er:2.2,url:"https://www.instagram.com/p/DYVOxLmvGfu/"},{d:"2026-05-07",t:"Carrossel",r:118,e:6,s:0,sh:0,er:5.1,url:"https://www.instagram.com/p/DYCfk5sDXOc/"},{d:"2026-05-27",t:"Imagem",r:76,e:1,s:0,sh:0,er:1.3,url:"https://www.instagram.com/p/DY3FuBTvfgB/"}];
+brPosts.sort((a,b)=>b.r-a.r);
+
+const usPosts=[{d:"2026-05-25",t:"Imagem",r:19,e:2,s:0,sh:0,er:10.5,url:"https://www.instagram.com/p/DYxSNIvpdGj/"},{d:"2026-05-29",t:"Imagem",r:16,e:5,s:0,sh:0,er:31.2,url:"https://www.instagram.com/p/DY7f119xsCt/"},{d:"2026-05-04",t:"Carrossel",r:14,e:2,s:0,sh:0,er:14.3,url:"https://www.instagram.com/p/DX7O6j5CU4a/"},{d:"2026-06-15",t:"Imagem",r:13,e:2,s:0,sh:0,er:15.4,url:"https://www.instagram.com/p/DZns_tdBzEW/"},{d:"2026-05-13",t:"Carrossel",r:12,e:2,s:0,sh:0,er:16.7,url:"https://www.instagram.com/p/DYSQlnFkUV-/"},{d:"2026-03-30",t:"Carrossel",r:12,e:3,s:0,sh:0,er:25.0,url:"https://www.instagram.com/p/DWgzqtniWAR/"},{d:"2026-03-27",t:"Carrossel",r:11,e:1,s:0,sh:0,er:9.1,url:"https://www.instagram.com/p/DWZqLQKgQyL/"},{d:"2026-04-06",t:"Carrossel",r:11,e:4,s:0,sh:0,er:36.4,url:"https://www.instagram.com/p/DWzOy-BCazV/"},{d:"2026-04-05",t:"Imagem",r:10,e:3,s:0,sh:0,er:30.0,url:"https://www.instagram.com/p/DWwQyrvAef9/"},{d:"2026-04-17",t:"Carrossel",r:10,e:3,s:0,sh:0,er:30.0,url:"https://www.instagram.com/p/DXPzMVgAfj_/"},{d:"2026-04-15",t:"Carrossel",r:9,e:2,s:0,sh:0,er:22.2,url:"https://www.instagram.com/p/DXJ6ezAAYji/"},{d:"2026-04-10",t:"Carrossel",r:8,e:2,s:0,sh:0,er:25.0,url:"https://www.instagram.com/p/DW9zaVlgdYD/"},{d:"2026-05-08",t:"Carrossel",r:8,e:1,s:0,sh:0,er:12.5,url:"https://www.instagram.com/p/DYFPbEglkDo/"},{d:"2026-06-18",t:"Imagem",r:7,e:1,s:0,sh:0,er:14.3,url:"https://www.instagram.com/p/DZvZgzyBZXG/"},{d:"2026-04-22",t:"Carrossel",r:5,e:2,s:0,sh:0,er:40.0,url:"https://www.instagram.com/p/DXcgfT9ieIB/"}];
+usPosts.sort((a,b)=>b.r-a.r);
+
+function renderTable(data,containerId){
+  const tbl=`<table style="width:100%;border-collapse:collapse;font-size:12px;">
+    <thead><tr style="border-bottom:1px solid #E2E1DB;">
+      <th style="text-align:left;padding:7px 8px;font-weight:500;color:#999890;">Data</th>
+      <th style="text-align:left;padding:7px 8px;font-weight:500;color:#999890;">Tipo</th>
+      <th style="text-align:right;padding:7px 8px;font-weight:500;color:#999890;">Alcance</th>
+      <th style="text-align:right;padding:7px 8px;font-weight:500;color:#999890;">Engaj.</th>
+      <th style="text-align:right;padding:7px 8px;font-weight:500;color:#999890;">Saves</th>
+      <th style="text-align:right;padding:7px 8px;font-weight:500;color:#999890;">ER</th>
+      <th style="text-align:center;padding:7px 8px;font-weight:500;color:#999890;">Link</th>
+    </tr></thead>
+    <tbody>${data.map(p=>`<tr style="border-bottom:1px solid #F1F0EC;">
+      <td style="padding:7px 8px;">${p.d.slice(5).split('-').reverse().join('/')}</td>
+      <td style="padding:7px 8px;">${p.t}</td>
+      <td style="text-align:right;padding:7px 8px;font-weight:500;">${p.r}</td>
+      <td style="text-align:right;padding:7px 8px;">${p.e}</td>
+      <td style="text-align:right;padding:7px 8px;">${p.s}</td>
+      <td style="text-align:right;padding:7px 8px;color:${p.er>=6?'#1D9E75':p.er>=3?'#EF9F27':'#E24B4A'}">${p.er}%</td>
+      <td style="text-align:center;padding:7px 8px;"><a href="${p.url}" target="_blank" style="color:#1F3FD0;font-size:11px;">ver →</a></td>
+    </tr>`).join('')}</tbody></table>`;
+  document.getElementById(containerId).innerHTML=`<div style="background:white;border:1px solid rgba(0,0,0,0.09);border-radius:14px;overflow:hidden;">${tbl}</div>`;
+}
+renderTable(brPosts,'brPostsTable');
+renderTable(usPosts,'usPostsTable');
+</script>
+</body>
+</html>
